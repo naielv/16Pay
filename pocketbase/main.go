@@ -222,10 +222,22 @@ func chargeCard(e *core.RequestEvent) error {
 	card.Set("balance", card.GetInt("balance")-int(body.Amount))
 	merchantWallet.Set("balance", merchantWallet.GetInt("balance")+int(body.Amount))
 	if err := e.App.Save(tx); err != nil {
-		return e.InternalServerError("No se ha podido guardar", err)
+		return e.InternalServerError("No se ha podido guardar el movimiento al cliente", err)
 	}
 	if err := e.App.Save(card); err != nil {
 		return e.InternalServerError("No se ha podido actualizar saldo del cliente", err)
+	}
+	txc := core.NewRecord(mustCollection(e, "transactions"))
+	txc.Set("card", merchantWallet.Id)
+	txc.Set("amount", -body.Amount)
+	txc.Set("concept", strings.TrimSpace(body.Concept))
+	txc.Set("ticket", body.Ticket)
+	txc.Set("status", "approved")
+	txc.Set("merchantName", card.GetString("name"))
+	txc.Set("merchantCard", card.Id)
+	txc.Set("idempotencyKey", body.IdempotencyKey)
+	if err := e.App.Save(txc); err != nil {
+		return e.InternalServerError("No se ha podido guardar el movimiento al comercio", err)
 	}
 	if err := e.App.Save(merchantWallet); err != nil {
 		return e.InternalServerError("No se ha podido actualizar saldo del comercio", err)
