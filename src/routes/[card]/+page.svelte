@@ -37,8 +37,8 @@
 	let authorizedPin = $state('');
 	let actionMessage = $state('');
 	let merchantLoginOpen = $state(false);
-	let merchantEmail = $state('demo@16pay.local');
-	let merchantPassword = $state('demo12345');
+	let merchantEmail = $state('');
+	let merchantPassword = $state('');
 	let merchantToken = $state('');
 	let merchantName = $state('');
 	let merchantLoginError = $state('');
@@ -507,7 +507,6 @@
 				<input class="login-input" bind:value={merchantPassword} type="password" autocomplete="current-password" placeholder="Contraseña" aria-label="Contraseña" onkeydown={(event) => event.key === 'Enter' && loginMerchant()} />
 				{#if merchantLoginError}<p class="form-error">{merchantLoginError}</p>{/if}
 				<button class="button dark full" onclick={loginMerchant}>Entrar <span>→</span></button>
-				<small class="demo-hint">Demo: demo@16pay.local · demo12345</small>
 			</div>
 		</div>
 	{/if}
