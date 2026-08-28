@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: 16pay
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8090}:8090"
+    environment:
+      - PAY_PUBLIC_DIR=/app/pb_public
+      - PB_DATA_DIR=/app/pb_data
+    volumes:
+      # Persist PocketBase data (SQLite database + uploads)
+      - pb_data:/app/pb_data
+      # optional: mount migrations from host for hot-reload during dev
+      # - ./pocketbase/migrations:/app/migrations
+    # Healthcheck (optional)
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:8090/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  pb_data:

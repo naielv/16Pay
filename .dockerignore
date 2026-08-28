@@ -1,0 +1,13 @@
+node_modules
+pb_data
+pb_data/**
+.git
+.gitignore
+.DS_Store
+README.md
+.vscode
+node_modules
+dist
+.svelte-kit
+build
+*.log
