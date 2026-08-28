@@ -152,10 +152,10 @@
 	async function completeOnboarding() {
 		if (!/^\d{4}$/.test(customerPin) || !/^\d{4}$/.test(merchantPin)) return;
 		if (apiAvailable) {
-			const response = await fetch(`/api/16pay/cards/${card.id}/onboard`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name: 'Mi tarjeta', customerPin, merchantPin }) });
+			const response = await fetch(`/api/16pay/cards/${card.id}/onboard`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ customerPin, merchantPin }) });
 			if (!response.ok) return;
 		}
-		card = { ...card, name: 'Mi tarjeta', customerPin, merchantPin };
+		card = { ...card, customerPin, merchantPin };
 		saveCard(card);
 		transactions = [];
 		onboardingStep = 3;

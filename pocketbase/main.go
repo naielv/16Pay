@@ -33,7 +33,6 @@ type merchantLoginRequest struct {
 	Password string `json:"password"`
 }
 type onboardRequest struct {
-	Name        string `json:"name"`
 	CustomerPIN string `json:"customerPin"`
 	MerchantPIN string `json:"merchantPin"`
 }
@@ -133,7 +132,6 @@ func onboardCard(e *core.RequestEvent) error {
 		record = core.NewRecord(mustCollection(e, "cards"))
 		record.Id = e.Request.PathValue("id")
 	}
-	record.Set("name", strings.TrimSpace(body.Name))
 	record.Set("status", "active")
 	record.Set("currency", ferreoCurrency)
 	hCustomer, errC := bcrypt.GenerateFromPassword([]byte(body.CustomerPIN), bcrypt.DefaultCost)
